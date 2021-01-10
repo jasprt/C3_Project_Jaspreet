@@ -41,6 +41,7 @@ class RestaurantTest {
 
     @Test
     public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time() {
+
         Restaurant restaurant = Mockito.mock(Restaurant.class);
         Mockito.doReturn(LocalTime.MAX).when(restaurant).getCurrentTime();
 
@@ -85,7 +86,8 @@ class RestaurantTest {
 
     @Test
     public void menu_returns_empty_list_if_restaurant_is_not_open() {
-        Restaurant restaurant = new Restaurant("", "", LocalTime.MIN, LocalTime.MIN);
+
+        Restaurant restaurant = new Restaurant("","",LocalTime.MIN,LocalTime.MIN);
         restaurant = Mockito.spy(restaurant);
 
         int listSize = restaurant.getMenu().size();
@@ -95,5 +97,71 @@ class RestaurantTest {
     }
 
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>ORDER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    /*This module needs to be implemented the TDD way
+    i.e.
+            1. Write failing test cases for the requirement.
+            2. Start actual coding on the failing test case.
+            3. Check if test case passes after coding the module method.
+     */
+
+    @Test
+    public void return_expected_order_amount_for_all_items_from_a_restaurant_menu() {
+        createDummyRestaurantWithItems();
+        List<Item> itemList = restaurant.getMenu();
+
+        int orderAmount = restaurant.getOrderAmount(itemList);
+
+        assertEquals(388, orderAmount);
+    }
+
+    @Test
+    public void return_expected_order_amount_for_selected_items_from_a_restaurant_menu() {
+        createDummyRestaurantWithItems();
+
+        int itemPrice = 500;
+        String itemName = "Pizza";
+        Item item = new Item(itemName, itemPrice);
+        itemList = restaurant.getMenu();
+        itemList.add(item);
+
+        //Get a sub list of selected items from the existing item list in the menu
+        //@fromindex(inclusive) 2 to @toIndex(exclusive) itemList.size() to fetch the last added item
+        List<Item> lastSelectedItemList = restaurant.getMenu().subList(2, itemList.size());
+        int orderAmount = restaurant.getOrderAmount(lastSelectedItemList);
+
+        assertEquals(500, orderAmount);
+
+    }
+
+    @Test
+    public void return_expected_order_amount_for_last_entered_item_name_in_the_restaurant_menu() {
+        createDummyRestaurantWithItems();
+
+        int itemPrice = 500;
+        String itemName = "Pizza";
+        Item item = new Item(itemName, itemPrice);
+        itemList.add(item);
+
+        int orderAmount = restaurant.getOrderAmount(itemName);
+
+        assertEquals(itemPrice, orderAmount);
+
+    }
+
+    @Test
+    public void return_expected_order_amount_for_all_item_name_in_the_restaurant_menu() {
+        createDummyRestaurantWithItems();
+
+        String orderedItemNames = "Sweet corn soup , Vegetable lasagne";
+        int orderAmount = restaurant.getOrderAmount(orderedItemNames);
+
+        assertEquals(388, orderAmount);
+
+    }
+
+    //<<<<<<<<<<<<<<<<<<<<<<<ORDER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 }

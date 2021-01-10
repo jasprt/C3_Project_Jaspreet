@@ -1,2 +1,2 @@
-C3_Project_Jaspreet_Singh
+C3_Project_Jaspreet
 # Restaurant Finder

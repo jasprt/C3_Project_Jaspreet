@@ -10,7 +10,7 @@ public class Restaurant {
     public LocalTime closingTime;
     private String name;
     private String location;
-    private List<Item> menu = new ArrayList<Item>();
+    private List<Item> menu = new ArrayList<>();
 
     public Restaurant(String name, String location, LocalTime openingTime, LocalTime closingTime) {
         this.name = name;
@@ -72,5 +72,37 @@ public class Restaurant {
         return name;
     }
 
+    //>>>>>>>>>>>>>>>>TDD Feature Method<<<<<<<<<<<<<<<<<<<<<<<
+    /**
+     * TDD approached method call to get total Order Amount for
+     * selected items from the restaurant menu
+     *
+     * @param itemList which contains items selected by user
+     * @return sum of the price of each item in the itemList
+     */
+
+    protected int getOrderAmount(List<Item> itemList) {
+        return itemList.stream().mapToInt(Item::getPrice).sum();
+    }
+
+    /**
+     * TDD approached method call to get total Order Amount for
+     * selected item names from the restaurant menu
+     *
+     * @param itemNames which contains string item names seperated by "," selected by user
+     * @return sum of the price of total selected items
+     */
+
+    public int getOrderAmount(String itemNames) {
+
+        //replace uneven spacing between item names separated by ,(comma)
+        String processedItemNames = itemNames.replaceAll(", | , | ,", ",");
+
+        List<String> itemNameList = Arrays.asList(processedItemNames.split(","));
+        List<Item> itemList = itemNameList.stream().map(this::findItemByName).collect(Collectors.toList());
+
+        return getOrderAmount(itemList);
+    }
+    //<<<<<<<<<<<<<<<<<<<<<<<TDD Feature Method>>>>>>>>>>>>>>>>
 
 }
